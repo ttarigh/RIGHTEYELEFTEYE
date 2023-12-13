@@ -88,8 +88,14 @@
 
     <!-- Container for camera view -->
     <div id="cameraContainer" style="display: none">
-        <video id="cameraView" width="480" height="480" autoplay playsinline></video>
-        <svg id="switcher">
+      <video
+        id="cameraView"
+        width="480"
+        height="480"
+        autoplay
+        playsinline
+      ></video>
+      <svg id="switcher">
         <rect></rect>
         <text
           id="words"
@@ -146,10 +152,15 @@
       // Preload the camera on page load
       window.onload = function () {
         var cameraView = document.getElementById("cameraView");
+        var constraints = {
+          video: {
+            facingMode: "environment", // This will attempt to use the back camera on mobile devices
+          },
+        };
 
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
           navigator.mediaDevices
-            .getUserMedia({ video: true })
+            .getUserMedia(constraints)
             .then(function (stream) {
               cameraView.srcObject = stream;
             })
