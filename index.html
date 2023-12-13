@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Interactive Video with Camera</title>
+    <style>
+      body,
+      html {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #ffffff;
+      }
+
+      #mediaContainer {
+        position: absolute;
+        width: 480px;
+        height: 480px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #staticImage,
+      video {
+        width: 100%;
+        height: 100%;
+      }
+
+      #cameraContainer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        display: none;
+      }
+
+      #cameraView {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: relative;
+        z-index: 1;
+      }
+      svg {
+        position: absolute;
+        left: 0; /*switch to 50% to move it to the other side on click*/
+        top: -50%;
+        width: 50vw;
+        height: 100vh;
+        z-index: 2;
+        transform: translate(0, 50%);
+      }
+      text {
+        font-family: monospace;
+        font-size: 40px;
+        font-style: normal;
+        font-variant: normal;
+        font-weight: 700;
+        line-height: 22px;
+      }
+      rect {
+        width: 100%;
+        height: 100%;
+        stroke-width: 3;
+        stroke: rgb(0, 0, 0);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="mediaContainer">
+      <img id="staticImage" src="firstframe.png" alt="Click to play" />
+      <video
+        id="interactiveVideo"
+        width="480"
+        height="480"
+        style="display: none"
+        autoplay
+        muted
+        webkit-playsinline
+        playsinline
+        controls="false"
+      >
+        <source src="vid.MOV" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+    <!-- Container for camera view -->
+    <div id="cameraContainer" style="display: none">
+      <video id="cameraView" width="480" height="480" autoplay></video>
+      <svg id="switcher">
+        <rect></rect>
+        <text
+          id="words"
+          x="50%"
+          y="50%"
+          dominant-baseline="middle"
+          text-anchor="middle"
+          fill="white"
+          font-size="40"
+        >
+          Switch to LEFT EYE
+        </text>
+      </svg>
+    </div>
+
+    <script>
+      var switched = false; // intially set switch to false
+      document
+        .getElementById("staticImage")
+        .addEventListener("click", function () {
+          var video = document.getElementById("interactiveVideo");
+          video.style.display = "block";
+          video.play();
+          this.style.display = "none";
+        });
+
+      document
+        .getElementById("switcher")
+        .addEventListener("click", function () {
+          var switcher = document.getElementById("switcher");
+          var words = document.getElementById("words");
+
+          console.log(switched);
+          if (switched == false) {
+            switcher.style.left = "50%";
+            switched = true;
+            words.textContent = "Switch to RIGHT EYE";
+          } else {
+            switcher.style.left = "0";
+            switched = false;
+            words.textContent = "Switch to LEFT EYE";
+          }
+        });
+
+      document.getElementById("interactiveVideo").addEventListener(
+        "ended",
+        function () {
+          document.getElementById("cameraContainer").style.display = "block";
+          document.getElementById("mediaContainer").style.display = "none";
+        },
+        false
+      );
+
+      // Preload the camera on page load
+      window.onload = function () {
+        var cameraView = document.getElementById("cameraView");
+
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          navigator.mediaDevices
+            .getUserMedia({ video: true })
+            .then(function (stream) {
+              cameraView.srcObject = stream;
+            })
+            .catch(function (error) {
+              console.log("Something went wrong!", error);
+            });
+        }
+      };
+    </script>
+  </body>
+</html>
