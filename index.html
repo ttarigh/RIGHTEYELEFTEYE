@@ -43,6 +43,7 @@
         object-fit: cover;
         position: relative;
         z-index: 1;
+        filter: blur(5px);
       }
       svg {
         position: absolute;
@@ -50,7 +51,7 @@
         top: -50%;
         width: 50vw;
         height: 100vh;
-        z-index: 2;
+        z-index: 4;
         transform: translate(0, 50%);
       }
       text {
@@ -61,11 +62,30 @@
         font-weight: 700;
         line-height: 22px;
       }
-      rect {
+      #switch {
         width: 100%;
         height: 100%;
         stroke-width: 3;
         stroke: rgb(0, 0, 0);
+      }
+      #readingTest {
+        scale: 1.4 1;
+        position: absolute;
+        top: 15%;
+        left: -5%;
+        width: 100vw;
+        height: 100vh;
+        z-index: 2;
+        filter: blur(5px);
+      }
+      .glasses {
+        position: absolute;
+        top: 15%;
+        left: -5%;
+        width: 110vw;
+        height: 100vh;
+        z-index: 3;
+        fill: rgb(222, 0, 0);
       }
     </style>
   </head>
@@ -96,7 +116,7 @@
         playsinline
       ></video>
       <svg id="switcher">
-        <rect></rect>
+        <rect id="switch"></rect>
         <text
           id="words"
           x="50%"
@@ -109,6 +129,10 @@
           Switch to LEFT EYE
         </text>
       </svg>
+      <img class="glasses" id= "rims" src='rim.svg' alt='glasses' />
+      <img class="glasses" id= "insides" src='lens.svg' alt='glasses' />
+
+      <img id="readingTest" src="readingtext.png" />
     </div>
 
     <script>
