@@ -23,9 +23,11 @@
       }
 
       #staticImage,
-      video {
-        width: 100%;
+      #interactiveVideo {
         height: 100%;
+        width: 100%;
+        object-fit: cover;
+        border-radius: 50%;
       }
 
       #cameraContainer {
@@ -47,7 +49,7 @@
       }
       svg {
         position: absolute;
-        left: 0; /*switch to 50% to move it to the other side on click*/
+        left: 50%; /*switch to 50% to move it to the other side on click*/
         top: -50%;
         width: 50vw;
         height: 100vh;
@@ -87,6 +89,15 @@
         z-index: 3;
         fill: rgb(222, 0, 0);
       }
+
+      #diamond {
+        width: 111.5vw;
+        height: 111vh;
+        top: 0;
+        display: none;
+        pointer-events: none;
+        scale: 1;
+      }
     </style>
   </head>
   <body>
@@ -101,8 +112,7 @@
         muted
         playsinline
       >
-        <source src="vid.MOV" type="video/mp4" />
-        Your browser does not support the video tag.
+        <source src="vid.mp4" type="video/mp4" />
       </video>
     </div>
 
@@ -126,17 +136,19 @@
           fill="white"
           font-size="40"
         >
-          Switch to LEFT EYE
+          Switch to RIGHT EYE
         </text>
       </svg>
-      <img class="glasses" id= "rims" src='rim.svg' alt='glasses' />
-      <img class="glasses" id= "insides" src='lens.svg' alt='glasses' />
+      <img class="glasses" id="rims" src="rim.svg" alt="glasses" />
+      <img class="glasses" id="insides" src="lens.svg" alt="glasses" />
+      <img class="glasses" id="diamond" src="diamond.svg" alt="glasses" />
 
       <img id="readingTest" src="readingtext.png" />
     </div>
 
     <script>
-      var switched = false; // intially set switch to false
+      var switched = true; 
+      var sideWeAreOn = "left";
       document
         .getElementById("staticImage")
         .addEventListener("click", function () {
@@ -152,16 +164,79 @@
           var switcher = document.getElementById("switcher");
           var words = document.getElementById("words");
 
-          console.log(switched);
           if (switched == false) {
-            switcher.style.left = "50%";
-            switched = true;
-            words.textContent = "Switch to RIGHT EYE";
-          } else {
             switcher.style.left = "0";
-            switched = false;
+            switched = true;
             words.textContent = "Switch to LEFT EYE";
+            sideWeAreOn = "right";
+          } else {
+            switcher.style.left = "50%";
+            switched = false;
+            words.textContent = "Switch to RIGHT EYE";
+            sideWeAreOn = "left";
           }
+        });
+
+      document
+        .getElementById("insides")
+        .addEventListener("mousedown", function () {
+          var lens = document.getElementById("insides");
+          var words = document.getElementById("words");
+          var rect = document.getElementById("switch");
+          var diamond = document.getElementById("diamond");
+
+          rect.style.fill = "white";
+          rect.style.stroke = "red";
+          words.style.fill = "transparent";
+          diamond.style.display = "block";
+          if (sideWeAreOn == "left") { //rect
+            rect.style.strokeWidth = "100px";
+            rect.setAttribute("rx", "0"); 
+            rect.setAttribute("ry", "0"); 
+            diamond.style.width = "111.5vw";
+            diamond.style.height = "111vh";
+            diamond.style.scale = "1";
+            diamond.style.top = "0";
+          } else { //circ
+            rect.style.strokeWidth = "100px"; 
+            rect.setAttribute("rx", "550"); 
+            rect.setAttribute("ry", "550"); 
+            diamond.style.width = "107.5vw";
+            diamond.style.height = "60vh";
+            diamond.style.scale = "1.5 1";
+            diamond.style.top = "19%";
+          }
+        });
+
+      document
+        .getElementById("insides")
+        .addEventListener("mouseup", function () {
+          var words = document.getElementById("words");
+          var rect = document.getElementById("switch");
+          var switcher = document.getElementById("switcher");
+          rect.setAttribute("rx", "0"); 
+          rect.setAttribute("ry", "0"); 
+
+          console.log("up");
+          rect.style.fill = "black";
+          rect.style.stroke = "black";
+          rect.style.strokeWidth = "1px";
+          words.style.fill = "white";
+
+          diamond.style.display = "none";
+
+        });
+
+      document
+        .getElementById("insides")
+        .addEventListener("touchstart", function (e) {
+          e.preventDefault();
+        });
+
+      document
+        .getElementById("insides")
+        .addEventListener("touchend", function (e) {
+          e.preventDefault();
         });
 
       document.getElementById("interactiveVideo").addEventListener(
@@ -173,12 +248,12 @@
         false
       );
 
-      // Preload the camera on page load
+      // preload the camera
       window.onload = function () {
         var cameraView = document.getElementById("cameraView");
         var constraints = {
           video: {
-            facingMode: "environment", // This will attempt to use the back camera on mobile devices
+            facingMode: "environment", 
           },
         };
 
