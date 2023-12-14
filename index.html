@@ -71,7 +71,7 @@
         width: 100%;
         height: 100%;
         stroke-width: 3;
-        stroke: rgb(0, 0, 0);
+        fill: transparent;
       }
       #readingTest {
         scale: 1.4 1;
@@ -118,6 +118,58 @@
         pointer-events: none;
         fill: #de0000;
       }
+
+      .boxes {
+        position: absolute;
+        z-index: 4;
+        width: 50vw;
+        height: 100vh;
+        top: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        pointer-events: none;
+      }
+
+      .boxes h2 {
+        margin-top: 0;
+        font-size: 40px;
+        pointer-events: none;
+      }
+      .boxes h3 {
+        margin: 0 80px;
+        font-size: 20px;
+        text-align: left;
+        pointer-events: none;
+      }
+
+      #softBox {
+        left: 0;
+        font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+        pointer-events: none;
+        color: transparent;
+      }
+      #hardBox {
+        left: 50%;
+        color: transparent;
+        pointer-events: none;
+        font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", Charcoal,
+          "Helvetica Inserat", "Bitstream Vera Sans Bold", "Arial Black",
+          "sans serif";
+      }
+      #instructions {
+        position: absolute;
+        margin: 10px;
+        top: 10px; 
+        left: 0;
+        right: 0;
+        text-align: left; 
+        color: #000; 
+        font-size: 10px; 
+        z-index: 5;
+      }
     </style>
   </head>
   <body>
@@ -162,7 +214,7 @@
           y="50%"
           dominant-baseline="middle"
           text-anchor="middle"
-          fill="white"
+          fill="transparent"
           font-size="40"
         >
           Switch to RIGHT EYE
@@ -171,8 +223,39 @@
       <img class="glasses" id="rims" src="rim.svg" alt="glasses" />
       <img class="glasses" id="insides" src="lens.svg" alt="glasses" />
       <img class="glasses" id="diamond" src="diamond.svg" alt="glasses" />
-
       <img id="readingTest" src="readingtext.png" />
+
+      <div class="boxes" id="hardBox">
+        <h2>Hard Skills</h2>
+        <h3>
+          My extensive coding expertise and wide-ranging experience in augmented
+          reality, gained from leading and contributing to diverse AR campaigns
+          across multiple industries, make me an ideal fit for Dream Syndicate.
+          I have developed multiple AR ios apps, built AR websites for a
+          plethora of industry-ranging use cases, deployed a multitude of AR
+          filters across all major platforms, and continue to expand my skills
+          everyday.
+        </h3>
+      </div>
+
+      <div class="boxes" id="softBox">
+        <h2>Soft Skills</h2>
+        <h3>
+          My extensive freelance background equips me ideally for Dream
+          Syndicate, where expertly handling client relations and transforming
+          their visions into reality (and often introducing them to immersive
+          technology), is a forte of mine. I have a strong background in the
+          arts and a naturally good "eye" for design. I am effortless at making
+          complex technology designed to be as intuitive as breathing.
+        </h3>
+      </div>
+
+      <div id="instructions">
+        <h1>
+          Click on the glasses lenses to test an eye, hold down on the lens to
+          read the text!
+        </h1>
+      </div>
     </div>
 
     <script>
@@ -216,7 +299,10 @@
         var rect = document.getElementById("switch");
         var diamond = document.getElementById("diamond");
 
-        rect.style.fill = "white";
+        var hardBox = document.getElementById("hardBox");
+        var softBox = document.getElementById("softBox");
+
+        rect.style.fill = "#f5eceb";
         rect.style.stroke = "red";
         words.style.fill = "transparent";
         if (!isMobileDevice()) {
@@ -231,6 +317,7 @@
           diamond.style.height = "111vh";
           diamond.style.scale = "1";
           diamond.style.top = "0";
+          hardBox.style.color = "black";
         } else {
           //circ
           rect.style.strokeWidth = "100px";
@@ -240,6 +327,7 @@
           diamond.style.height = "60vh";
           diamond.style.scale = "1.5 1";
           diamond.style.top = "19%";
+          softBox.style.color = "black";
         }
       }
 
@@ -257,6 +345,9 @@
         words.style.fill = "white";
 
         diamond.style.display = "none";
+
+        hardBox.style.color = "transparent";
+        softBox.style.color = "transparent";
       }
 
       document
