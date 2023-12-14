@@ -116,7 +116,7 @@
         left: auto;
         transform: translate(0, 0);
         pointer-events: none;
-        fill: #DE0000;
+        fill: #de0000;
       }
     </style>
   </head>
@@ -206,59 +206,72 @@
           }
         });
 
+      function isMobileDevice() {
+        return /Mobi|Android|iPhone/i.test(navigator.userAgent);
+      }
+
       function holdingDown() {
-          var lens = document.getElementById("insides");
-          var words = document.getElementById("words");
-          var rect = document.getElementById("switch");
-          var diamond = document.getElementById("diamond");
+        var lens = document.getElementById("insides");
+        var words = document.getElementById("words");
+        var rect = document.getElementById("switch");
+        var diamond = document.getElementById("diamond");
 
-          rect.style.fill = "white";
-          rect.style.stroke = "red";
-          words.style.fill = "transparent";
+        rect.style.fill = "white";
+        rect.style.stroke = "red";
+        words.style.fill = "transparent";
+        if (!isMobileDevice()) {
           diamond.style.display = "block";
-          if (sideWeAreOn == "left") {
-            //rect
-            rect.style.strokeWidth = "100px";
-            rect.setAttribute("rx", "0");
-            rect.setAttribute("ry", "0");
-            diamond.style.width = "111.5vw";
-            diamond.style.height = "111vh";
-            diamond.style.scale = "1";
-            diamond.style.top = "0";
-          } else {
-            //circ
-            rect.style.strokeWidth = "100px";
-            rect.setAttribute("rx", "550");
-            rect.setAttribute("ry", "550");
-            diamond.style.width = "107.5vw";
-            diamond.style.height = "60vh";
-            diamond.style.scale = "1.5 1";
-            diamond.style.top = "19%";
-          }
         }
-
-        function notHoldingDown() {
-          var words = document.getElementById("words");
-          var rect = document.getElementById("switch");
-          var switcher = document.getElementById("switcher");
+        if (sideWeAreOn == "left") {
+          //rect
+          rect.style.strokeWidth = "100px";
           rect.setAttribute("rx", "0");
           rect.setAttribute("ry", "0");
-
-          console.log("up");
-          rect.style.fill = "black";
-          rect.style.stroke = "black";
-          rect.style.strokeWidth = "1px";
-          words.style.fill = "white";
-
-          diamond.style.display = "none";
+          diamond.style.width = "111.5vw";
+          diamond.style.height = "111vh";
+          diamond.style.scale = "1";
+          diamond.style.top = "0";
+        } else {
+          //circ
+          rect.style.strokeWidth = "100px";
+          rect.setAttribute("rx", "550");
+          rect.setAttribute("ry", "550");
+          diamond.style.width = "107.5vw";
+          diamond.style.height = "60vh";
+          diamond.style.scale = "1.5 1";
+          diamond.style.top = "19%";
         }
+      }
 
-      document.getElementById("insides").addEventListener("mousedown", holdingDown);
-      document.getElementById("insides").addEventListener("touchstart", holdingDown);
+      function notHoldingDown() {
+        var words = document.getElementById("words");
+        var rect = document.getElementById("switch");
+        var switcher = document.getElementById("switcher");
+        rect.setAttribute("rx", "0");
+        rect.setAttribute("ry", "0");
 
-      document.getElementById("insides").addEventListener("mouseup", notHoldingDown);
-      document.getElementById("insides").addEventListener("touchend", notHoldingDown);
+        console.log("up");
+        rect.style.fill = "black";
+        rect.style.stroke = "black";
+        rect.style.strokeWidth = "1px";
+        words.style.fill = "white";
 
+        diamond.style.display = "none";
+      }
+
+      document
+        .getElementById("insides")
+        .addEventListener("mousedown", holdingDown);
+      document
+        .getElementById("insides")
+        .addEventListener("touchstart", holdingDown);
+
+      document
+        .getElementById("insides")
+        .addEventListener("mouseup", notHoldingDown);
+      document
+        .getElementById("insides")
+        .addEventListener("touchend", notHoldingDown);
 
       document
         .getElementById("insides")
