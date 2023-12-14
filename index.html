@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Interactive Video with Camera</title>
+    <title>Test Tina's Vision</title>
     <style>
       body,
       html {
@@ -28,6 +28,9 @@
         width: 100%;
         object-fit: cover;
         border-radius: 50%;
+        border-color: red;
+        border-width: 5px;
+        border-style: solid;
       }
 
       #cameraContainer {
@@ -98,11 +101,37 @@
         pointer-events: none;
         scale: 1;
       }
+      #curve {
+        fill: transparent;
+      }
+      #TTV {
+        font-size: 39px;
+      }
+      #title {
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+        z-index: 4;
+        top: auto;
+        left: auto;
+        transform: translate(0, 0);
+        pointer-events: none;
+        fill: #DE0000;
+      }
     </style>
   </head>
   <body>
     <div id="mediaContainer">
       <img id="staticImage" src="firstframe.png" alt="Click to play" />
+      <svg id="title" viewBox="0 0 500 500">
+        <path
+          id="curve"
+          d="M73.2,148.6c4-6.1,65.5-96.8,178.6-95.6c111.3,1.2,170.8,90.3,175.1,97"
+        />
+        <text id="TTV" width="500">
+          <textPath xlink:href="#curve">Test Tina's Vision</textPath>
+        </text>
+      </svg>
       <video
         id="interactiveVideo"
         width="480"
@@ -147,7 +176,7 @@
     </div>
 
     <script>
-      var switched = true; 
+      var switched = true;
       var sideWeAreOn = "left";
       document
         .getElementById("staticImage")
@@ -177,9 +206,7 @@
           }
         });
 
-      document
-        .getElementById("insides")
-        .addEventListener("mousedown", function () {
+      function holdingDown() {
           var lens = document.getElementById("insides");
           var words = document.getElementById("words");
           var rect = document.getElementById("switch");
@@ -189,33 +216,33 @@
           rect.style.stroke = "red";
           words.style.fill = "transparent";
           diamond.style.display = "block";
-          if (sideWeAreOn == "left") { //rect
+          if (sideWeAreOn == "left") {
+            //rect
             rect.style.strokeWidth = "100px";
-            rect.setAttribute("rx", "0"); 
-            rect.setAttribute("ry", "0"); 
+            rect.setAttribute("rx", "0");
+            rect.setAttribute("ry", "0");
             diamond.style.width = "111.5vw";
             diamond.style.height = "111vh";
             diamond.style.scale = "1";
             diamond.style.top = "0";
-          } else { //circ
-            rect.style.strokeWidth = "100px"; 
-            rect.setAttribute("rx", "550"); 
-            rect.setAttribute("ry", "550"); 
+          } else {
+            //circ
+            rect.style.strokeWidth = "100px";
+            rect.setAttribute("rx", "550");
+            rect.setAttribute("ry", "550");
             diamond.style.width = "107.5vw";
             diamond.style.height = "60vh";
             diamond.style.scale = "1.5 1";
             diamond.style.top = "19%";
           }
-        });
+        }
 
-      document
-        .getElementById("insides")
-        .addEventListener("mouseup", function () {
+        function notHoldingDown() {
           var words = document.getElementById("words");
           var rect = document.getElementById("switch");
           var switcher = document.getElementById("switcher");
-          rect.setAttribute("rx", "0"); 
-          rect.setAttribute("ry", "0"); 
+          rect.setAttribute("rx", "0");
+          rect.setAttribute("ry", "0");
 
           console.log("up");
           rect.style.fill = "black";
@@ -224,8 +251,14 @@
           words.style.fill = "white";
 
           diamond.style.display = "none";
+        }
 
-        });
+      document.getElementById("insides").addEventListener("mousedown", holdingDown);
+      document.getElementById("insides").addEventListener("touchstart", holdingDown);
+
+      document.getElementById("insides").addEventListener("mouseup", notHoldingDown);
+      document.getElementById("insides").addEventListener("touchend", notHoldingDown);
+
 
       document
         .getElementById("insides")
@@ -253,7 +286,7 @@
         var cameraView = document.getElementById("cameraView");
         var constraints = {
           video: {
-            facingMode: "environment", 
+            facingMode: "environment",
           },
         };
 
